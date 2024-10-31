@@ -45,15 +45,41 @@ app.post("/api/item", (req, res) => {
   });
 });
 
+app.post("/api/item/:id", (req, res) => {
+  const id = req.params.id;
+  const updatedItem = req.body;
+  const items = [...data];
+  const index = items.findIndex((i) => i.id == id);
+
+  if (index === -1)
+    return res.status(200).json({
+      result: {
+        error: `${id} NOT FOUND`,
+      },
+      status: "error",
+    });
+
+  items[index] = {
+    ...items[index],
+    ...updatedItem,
+  };
+  data = items;
+
+  res.status(200).json({
+    result: {},
+    status: "success",
+  });
+});
+
 app.delete("/api/item/:id", (req, res) => {
   const id = req.params.id;
   const items = [...data];
   const index = items.findIndex((i) => i.id == id);
 
-  if (!index)
+  if (index === -1)
     return res.status(200).json({
       result: {
-        error: "Not Found",
+        error: `${id} NOT FOUND`,
       },
       status: "error",
     });

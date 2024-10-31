@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import withAppProviders from "./withAppProviders";
+import { Box, Divider, Paper } from "@mui/material";
+import Form from "./components/Form";
+import List from "./components/List";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="w-[100vw] h-[100vh] overflow-hidden">
+      <Box className="w-full h-full flex flex-col flex-1 p-20">
+        <Paper className="w-full h-full px-20 py-24" elevation={10}>
+          <Box className="w-full h-full flex flex-row flex-1 space-x-10">
+            <Box className={"w-1/3 h-full flex flex-col"}>
+              <Form />
+            </Box>
+
+            <Divider orientation="vertical" />
+
+            <Box className={"w-2/3 h-full flex flex-col"}>
+              <List />
+            </Box>
+          </Box>
+        </Paper>
+      </Box>
     </div>
   );
-}
+};
 
-export default App;
+export default withAppProviders(App)();

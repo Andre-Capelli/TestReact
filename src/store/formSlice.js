@@ -1,26 +1,52 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { post } from "../core/axios";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { post } from '../core/axios';
 
-const initialState = {};
+const initialState = {
+  item: null,
+};
 
 export const createItem = createAsyncThunk(
-  "form/createItem",
+  'form/createItem',
   async (data, { fulfillWithValue, rejectWithValue }) => {
     try {
-      const res = await post("/item", data);
+      const res = await post('/item', data);
+      console.log(res);
+      if (res.status !== 'success') throw new Error('');
 
-      return fulfillWithValue(res.result);
+      return fulfillWithValue({ ...data, id: res.result.last_id });
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
+  },
+);
+
+export const editItem = createAsyncThunk(
+  'form/editItem',
+  async (data, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      const res = await post(`/item/${data.id}`, data);
+      console.log(res);
+      if (res.status !== 'success') throw new Error('');
+
+      return fulfillWithValue({ ...data });
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  },
 );
 
 const formSlice = createSlice({
-  name: "form",
+  name: 'form',
   initialState,
-  reducers: {},
+  reducers: {
+    setItem: (state, action) => {
+      state.item = action.payload;
+    },
+  },
   extraReducers: (b) => {},
 });
+
+export const selectItem = (state) => state.form.item;
+export const { setItem } = formSlice.actions;
 
 export default formSlice.reducer;

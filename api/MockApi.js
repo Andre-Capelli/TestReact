@@ -1,6 +1,6 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 5000;
@@ -9,25 +9,31 @@ app.use(cors());
 app.use(bodyParser.json());
 
 function generateUUID() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0;
-    const v = c == "x" ? r : (r & 0x3) | 0x8;
+    const v = c == 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
 
-let data = [];
+let data = [
+  {
+    id: 1,
+    name: 'carol',
+    email: 'caroline@carol.com',
+  },
+];
 
-app.post("/api/item", (req, res) => {
+app.post('/api/item', (req, res) => {
   const newItem = req.body;
   const { name, email } = newItem;
 
   if (!name || !email)
     return res.status(200).json({
       result: {
-        error: "Name and Email are required",
+        error: 'Name and Email are required',
       },
-      status: "error",
+      status: 'error',
     });
 
   const id = generateUUID();
@@ -41,11 +47,11 @@ app.post("/api/item", (req, res) => {
     result: {
       last_id: id,
     },
-    status: "success",
+    status: 'success',
   });
 });
 
-app.post("/api/item/:id", (req, res) => {
+app.post('/api/item/:id', (req, res) => {
   const id = req.params.id;
   const updatedItem = req.body;
   const items = [...data];
@@ -56,7 +62,7 @@ app.post("/api/item/:id", (req, res) => {
       result: {
         error: `${id} NOT FOUND`,
       },
-      status: "error",
+      status: 'error',
     });
 
   items[index] = {
@@ -67,11 +73,11 @@ app.post("/api/item/:id", (req, res) => {
 
   res.status(200).json({
     result: {},
-    status: "success",
+    status: 'success',
   });
 });
 
-app.delete("/api/item/:id", (req, res) => {
+app.delete('/api/item/:id', (req, res) => {
   const id = req.params.id;
   const items = [...data];
   const index = items.findIndex((i) => i.id == id);
@@ -81,7 +87,7 @@ app.delete("/api/item/:id", (req, res) => {
       result: {
         error: `${id} NOT FOUND`,
       },
-      status: "error",
+      status: 'error',
     });
 
   items.splice(index, 1);
@@ -89,20 +95,20 @@ app.delete("/api/item/:id", (req, res) => {
 
   res.status(200).json({
     result: {},
-    status: "success",
+    status: 'success',
   });
 });
 
-app.get("/api/items", (req, res) => {
+app.get('/api/items', (req, res) => {
   res.json({
     result: data,
-    status: "success",
+    status: 'success',
   });
 });
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.json({
-    HI: ">)",
+    HI: '>)',
   });
 });
 

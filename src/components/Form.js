@@ -1,5 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Input,
+  TextField,
+  Typography,
+} from "@mui/material";
 import _ from "lodash";
 import React, { forwardRef, memo } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -13,10 +20,20 @@ const Form = forwardRef((props, ref) => {
 
   const schema = yup.object().shape({
     name: yup.string().required("Input Required"),
+    email: yup.string().required("Email required"),
+    phone_number: yup.object().shape({
+      phone: yup.string().required("Phone required"),
+      prefix: yup.string().required("Prefix required"),
+    }),
   });
 
   const defaultValues = {
     name: "",
+    email: "",
+    phone_number: {
+      phone: "",
+      prefix: "",
+    },
   };
 
   const {
@@ -65,10 +82,55 @@ const Form = forwardRef((props, ref) => {
         )}
       />
 
+      <Controller
+        name={"email"}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Email"
+            label={"Email"}
+            helperText={errors?.email?.message}
+            error={!!errors?.email}
+            required
+          />
+        )}
+      />
+
+      <Controller
+        name={"phone_number.phone"}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Phone number"
+            label={"Phone number"}
+            helperText={errors?.phone_number?.phone?.message}
+            error={!!errors?.phone_number?.phone}
+            required
+          />
+        )}
+      />
+
+      <Controller
+        name={"phone_number.prefix"}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            placeholder="Phone prefix"
+            label={"Phone Prefix"}
+            helperText={errors?.phone_number?.prefix?.message}
+            error={!!errors?.phone_number?.prefix}
+            required
+          />
+        )}
+      />
+
       <Box className="flex flex-row justify-end bottom-0 w-full py-20 !mt-auto">
         <Button
           className="ml-auto"
-          // onClick={handleSubmit(onSubmit)}
+          onClick={handleSubmit(onSubmit)}
           disabled={_.isEmpty(dirtyFields) || !isValid}
         >
           {"Salvar"}

@@ -8,8 +8,8 @@ export const createItem = createAsyncThunk(
   async (data, { fulfillWithValue, rejectWithValue }) => {
     try {
       const res = await post("/item", data);
-
-      return fulfillWithValue(res.result);
+      console.log(res);
+      return fulfillWithValue({ ...data, id: res.result.last_id  });
     } catch (error) {
       return rejectWithValue(error);
     }

@@ -41,6 +41,7 @@ const Form = forwardRef((props, ref) => {
     handleSubmit,
     formState: { dirtyFields, isValid, errors },
     watch,
+    reset,
   } = useForm({
     mode: "onChange",
     defaultValues,
@@ -53,7 +54,7 @@ const Form = forwardRef((props, ref) => {
     try {
       dispatch(createItem(data))
         .then((r) => {
-          console.log(r);
+          reset(defaultValues);
         })
         .catch((e) => console.log(e));
     } catch (error) {}
